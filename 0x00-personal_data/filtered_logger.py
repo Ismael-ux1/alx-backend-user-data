@@ -3,9 +3,9 @@
 import re
 
 
-def filter_datum(fields: [list], redaction: str, message: str, separator: str) -> str:
-    # Compile regex pattern to avoid recompilation in each iteration
-    pattern = re.compile('|'.join(f'{re.escape(field)}=[^{re.escape(separator)}]*' for field in fields))
-    
-    # Use a lambda function to perform the substitution with the redaction string
-    return pattern.sub(lambda match: f'{match.group().split("=")[0]}={redaction}', message)
+def filter_datum(fields: list, redaction: str, message: str,
+                 separator: str) -> str:
+    """ A function that returns the log message obfuscated """
+    for field in fields:
+        message = re.sub(f"{field}=[^;]*", f"{field}={redaction}", message)
+    return message
