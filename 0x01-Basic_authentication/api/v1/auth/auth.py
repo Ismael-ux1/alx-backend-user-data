@@ -20,10 +20,20 @@ class Auth():
 
 
         Returns:
-        bool:
+        bool: True if the path is not in the list of strings excluded_paths,
+              False otherwise.
         """
-        # Path and excluded_paths will be used later
-        return False
+        if path is None:
+            return True
+
+        if not excluded_paths:
+            return True
+
+        # Ensure path ends with a '/'
+        if not path.endswith('/'):
+            path += '/'
+
+        return path not in excluded_paths
 
     def authorization_header(self, request=None) -> str:
         """
