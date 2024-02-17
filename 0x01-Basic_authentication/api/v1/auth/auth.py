@@ -39,7 +39,6 @@ class Auth():
                 return False
             elif path == ep:
                 return False
-            
             return True
 
     def authorization_header(self, request=None) -> str:
