@@ -77,17 +77,18 @@ class BasicAuth(Auth):
         (str, str): The user email and password if they exist,
                     (None, None) otherwise.
         """
-        if decoded_base64_authorization_header is None:
-            return None, None
-
-        if not isinstance(decoded_base64_authorization_header, str):
+        if decoded_base64_authorization_header is None or \
+        not isinstance(decoded_base64_authorization_header, str):
             return None, None
 
         if ':' not in decoded_base64_authorization_header:
             return None, None
-
-        credentials = decoded_base64_authorization_header.split(':', 1)
-        return credentials[0], credentials[1]
+        # split the credentials at the first occurrence of ':'
+        split_credentials = decoded_base64_authorization_header.split(':', 1)
+        user_email = split_credentials[0]
+        user_pwd = split_credentials[1] if len(split_credentials) > 1 else None
+        
+        return user_email, user_pwd
 
     def user_object_from_credentials(self,
                                      user_email: str,
