@@ -78,7 +78,7 @@ class BasicAuth(Auth):
                     (None, None) otherwise.
         """
         if decoded_base64_authorization_header is None or \
-        not isinstance(decoded_base64_authorization_header, str):
+                not isinstance(decoded_base64_authorization_header, str):
             return None, None
 
         if ':' not in decoded_base64_authorization_header:
@@ -87,7 +87,7 @@ class BasicAuth(Auth):
         split_credentials = decoded_base64_authorization_header.split(':', 1)
         user_email = split_credentials[0]
         user_pwd = split_credentials[1] if len(split_credentials) > 1 else None
-        
+
         return user_email, user_pwd
 
     def user_object_from_credentials(self,
@@ -131,15 +131,16 @@ class BasicAuth(Auth):
               None otherwise.
         """
         authorization_header = \
-        self.authorization_header(request)
+            self.authorization_header(request)
 
         base64_authorization_header = \
-        self.extract_base64_authorization_header(authorization_header)
+            self.extract_base64_authorization_header(authorization_header)
 
         decoded_base64_authorization_header = \
-        self.decode_base64_authorization_header(base64_authorization_header)
+            self.decode_base64_authorization_header(
+                    base64_authorization_header)
 
         user_email, user_pwd = \
-        self.extract_user_credentials(decoded_base64_authorization_header)
+            self.extract_user_credentials(decoded_base64_authorization_header)
 
         return self.user_object_from_credentials(user_email, user_pwd)
