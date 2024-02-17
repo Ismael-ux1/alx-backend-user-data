@@ -118,3 +118,27 @@ class BasicAuth(Auth):
                 return user
 
             return None
+
+    def current_user(self, request=None) -> User:
+        """
+        Method that retrieves the User instance for a request.
+        Parameters:
+        request: The Flask request object.
+
+        Returns:
+        User: The User instance if it exists and the password is correct,
+              None otherwise.
+        """
+        authorization_header = \
+        self.authorization_header(request)
+
+        base64_authorization_header = \
+        self.extract_base64_authorization_header(authorization_header)
+
+        decoded_base64_authorization_header = \
+        self.decode_base64_authorization_header(base64_authorization_header)
+
+        user_email, user_pwd = \
+        self.extract_user_credentials(decoded_base64_authorization_header)
+
+        return self.user_object_from_credentials(user_email, user_pwd)
