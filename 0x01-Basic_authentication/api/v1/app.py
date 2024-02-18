@@ -46,13 +46,13 @@ def before_request_func():
 
     # If the request does not have an Authorization header,
     # abort the request with a 401 Unauthorized status
-    # if auth.authorization_header(request) is None:
-        # abort(401)
+    if auth.authorization_header(request) is None:
+        abort(401)
 
     # If there is no current user,
     # abort the request with a 403 Forbidden status
-    # if auth.current_user(request) is None:
-        # abort(403)
+    if auth.current_user(request) is None:
+        abort(403)
 
 
 @app.errorhandler(404)
