@@ -71,3 +71,29 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
     return mysql.connector.connect(
         user=username, password=password, host=host, database=db_name
     )
+
+
+def main():
+    """ main """
+    db = get_db()
+    cursor = db.cursor()
+    cursor.execute("SELECT * FROM users")
+
+    logger = logging.getLogger("user_data")
+    logger.setLevel(logging.INFO)
+    logger.propagate = False
+
+    sh = logging.StreamHandler()
+    formatter = RedactingFormatter(PII_FIELDS)
+    sh.setFormatter(formatter)
+
+    logger.addHandler(sh)
+
+    for row in cursor:
+        message = "; ".join([f"{key}={value}"
+                            for key, value in zip(cursor.column_names, row)])
+        logger.info(message)
+
+
+if __name__ == "__main__":
+    main()
