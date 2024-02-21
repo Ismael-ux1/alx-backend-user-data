@@ -47,8 +47,7 @@ class DB:
         return new_user
 
     def find_user_by(self, **kwargs) -> User:
-        """ 
-        Find a user in the database by specific attributes
+        """ Find a user in the database by specific attributes
         Args:
             **kwargs: Arbitrary keyword arguments representing the,
                       attributes of the user to search for
