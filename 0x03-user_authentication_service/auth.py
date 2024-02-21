@@ -44,16 +44,14 @@ class Auth:
         """
         # Check if a user already exists with the given email
         try:
-            user = self._db.find_user_by(email=email)
-            if user:
-                raise ValueError(f"User {email} already exists")
+            # Attempt to find a user with the given email
+            self._db.find_user_by(email=email)
         except NoResultFound:
-            pass
-
-        # Hash the password
-        hashed_password = self._hash_password(password)
-
-        # Save the user to the database and return the User object
-        user = self._db.add_user(email=email, hashed_password=hashed_password)
-
-        return user
+            # If no user is found, hash the password
+            hashed_password = self._hash_password(password)
+            # Add the new user to the database and return the User object
+            return self._db.add_user(email=email,
+                                     hashed_password=hashed_password)
+        else:
+            # If a user is found, raise a ValueError
+            raise ValueError(f"User {email} already exists")
