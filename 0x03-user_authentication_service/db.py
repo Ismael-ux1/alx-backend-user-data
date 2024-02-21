@@ -6,6 +6,9 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
 from sqlalchemy import create_engine, exc
+engine = create_engine("sqlite:///db.sqlite")
+Session = sessionmaker(bind=engine)
+session = Session()
 
 from user import Base, User
 
@@ -46,7 +49,7 @@ class DB:
         self._session.commit()
         return new_user
 
-    def find_user_by(self, **kwargs) -> User:
+    def find_user_by(self, **kwargs):
         """ Find a user in the database by specific attributes
         Args:
             **kwargs: Arbitrary keyword arguments representing the,
