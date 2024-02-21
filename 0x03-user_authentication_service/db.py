@@ -5,6 +5,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
+from sqlalchemy import create_engine, exc
 
 from user import Base, User
 
@@ -44,3 +45,28 @@ class DB:
         self._session.add(new_user)
         self._session.commit()
         return new_user
+
+    def find_user_by(self, **kwargs) -> User:
+        """ Find a user in the database by specific attributes
+        Args:
+            **kwargs: Arbitrary keyword arguments representing the,
+                      attributes of the user to search for
+
+        Returns:
+            User: The User object that matches the specified attributes
+
+        Raises:
+            NoResultFound: If no user with the specified attributes is found
+            InvalidRequestError: If the query parameters are invalid
+        """
+
+        # Create a query object
+        query = self._session.query(User).filter_by(**kwargs)
+        try:
+            # Try to return the first result of the query
+            return query.one()
+        except exc.NoResultFound:
+            raise
+        except exc.InvalidRequestError:
+            # Raise InvalidRequestError if the query parameters are invalid
+            raise
