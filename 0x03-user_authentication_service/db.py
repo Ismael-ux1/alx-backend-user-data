@@ -5,7 +5,8 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
-from sqlalchemy import create_engine, exc
+from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy.exc import InvalidRequestError
 
 from user import Base, User
 
@@ -59,14 +60,17 @@ class DB:
             NoResultFound: If no user with the specified attributes is found
             InvalidRequestError: If the query parameters are invalid
         """
-
-        # Create a query object
-        query = self._session.query(User).filter_by(**kwargs)
         try:
-            # Try to return the first result of the query
-            return query.one()
-        except exc.NoResultFound:
-            raise
-        except exc.InvalidRequestError:
-            # Raise InvalidRequestError if the query parameters are invalid
-            raise
+            # Query the User model with the provided keyword arguments
+            user = self._session.query(User).filter_by(**kwargs).one()
+        except NoResultFound:
+            # NoResultFound is raised when the .one(),
+            # method doesn't find any matches
+            raise NoResultFound()
+        except InvalidRequestError:
+            # InvalidRequestError is raised when the,
+            # query parameters are invalid
+            raise InvalidRequestError()
+        # If a user was found and no exceptions were raised,
+        # we return the user
+        return user
