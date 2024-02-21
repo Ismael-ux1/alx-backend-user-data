@@ -74,3 +74,29 @@ class DB:
         # If a user was found and no exceptions were raised,
         # we return the user
         return user
+
+    def update_user(self, user_id: int, **kwargs) -> None:
+        """Update a user in the database
+
+        Args:
+            user_id (int): The id of the user to update
+            **kwargs: Arbitrary keyword arguments representing,
+                      the attributes to update
+
+        Raises:
+            ValueError: If an argument that does not correspond to,
+                        a user attribute is passed
+        """
+        # Use find_user_by to locate the user to update
+        user = self.find_user_by(id=user_id)
+
+        # Check if any of the kwargs do not correspond to User attributes
+        for key in kwargs:
+            if not hasattr(user, key):
+                raise ValueError()
+
+        # Update the user's attributes and commit changes to the database
+        for key, value in kwargs.items():
+            setattr(user, key, value)
+
+        self._session.commit()
