@@ -71,6 +71,7 @@ def logout() -> str:
         abort(403)
 
 
+@app.route("/profile")
 def profile() -> str:
     """ function that respond to the GET /profile route. """
     # Get the session ID from the cookies
@@ -94,12 +95,15 @@ def get_reset_password_token() -> str:
     # Get the email from the form data
     email = request.form.get('email')
 
-    # If the user exists, generate a token
+    # Try to find the user with the given email
     try:
-        reset_token = AUTH.get_reset_password_toke(email)
+        user = AUTH.get_user_by(email=email)
     except ValueError:
         # If the email is not registered, respond with a 403 status code
         abort(403)
+
+    # If the user exists, generate a token
+    reset_token = AUTH.get_reset_password_token(email)
     return jsonify({"email": email, "reset_token": reset_token})
 
 
