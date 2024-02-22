@@ -71,6 +71,24 @@ def logout() -> str:
         abort(403)
 
 
+@app.route('/profile')
+def profile() -> str:
+    """ function that respond to the GET /profile route. """
+    # Get the session ID from the cookies
+    session_id = request.cookies.get('session_id')
+
+    # Find the user with the requested session ID
+    user = AUTH.get_user_from_session_id(session_id)
+
+    # If the user exists
+    if user:
+        # Respond with a 200 HTTP status and the user's email
+        return jsonify({"email": user.email}), 200
+    else:
+        # If the user does not exist, respond with a 403 HTTP status
+        abort(403)
+
+
 if __name__ == "__main__":
     """ Run the app if this module is executed """
     app.run(host="0.0.0.0", port="5000")
