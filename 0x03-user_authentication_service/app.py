@@ -96,13 +96,13 @@ def get_reset_password_token():
 
     # Try to find the user with the given email
     try:
-        user = auth.get_user_by(email=email)
+        user = AUTH.get_user_by(email=email)
     except ValueError:
         # If the email is not registered, respond with a 403 status code
         abort(403)
 
     # If the user exists, generate a token
-    reset_token = auth.get_reset_password_token(email)
+    reset_token = AUTH.get_reset_password_token(email)
 
     # Respond with a 200 HTTP status and the email and reset token
     return jsonify({"email": email, "reset_token": reset_token}), 200
