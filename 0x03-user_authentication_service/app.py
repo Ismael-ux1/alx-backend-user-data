@@ -71,7 +71,7 @@ def logout() -> str:
         abort(403)
 
 
-@app.route("/profile")
+@app.route("/profile", methods=['GET'])
 def profile() -> str:
     """ function that respond to the GET /profile route. """
     # Get the session ID from the cookies
