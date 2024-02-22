@@ -175,7 +175,7 @@ class Auth:
         # Return the token
         return reset_token
 
-    def update_password(self, reset_token: str, password: str) -> None:
+    def update_password(self, reset_token: str, password: str):
         """Update a user's password
 
         Args:
