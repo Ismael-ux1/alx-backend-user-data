@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """ Basic Flask app """
-from flask import Flask, jsonify, request, make_response
+from flask import Flask, jsonify, request, make_response, abort
 from auth import Auth
 
 # Create an instance of the Flask class
 app = Flask(__name__)
-AUTH = Auth()
+auth = Auth()
 
 
 @app.route("/")
@@ -26,6 +26,29 @@ def users():
         return jsonify({"email": user.email, "message": "user created"}), 200
     except ValueError:
         return jsonify({"message": "email already registered"}), 400
+
+
+@app.route('/sessions', methods=['POST'])
+def login():
+    # function to respond to the POST /sessions route.
+    email = request.form.get('email')
+    password = request.form.get('password')
+
+    # Validate the email and password
+    if not auth.valid_login(email, password):
+        abort(401)
+
+    # If the login information is correct, create a new session for the user
+    session_id = auth.create_session(email)
+
+    # Create a response with a JSON payload
+    response = make_response(jsonify({"message": "Logged in successfully"}),
+                             200)
+
+    # Store the session ID as a cookie with key "session_id" on the response
+    response.set_cookie('session_id', session_id)
+
+    return response
 
 
 if __name__ == "__main__":
