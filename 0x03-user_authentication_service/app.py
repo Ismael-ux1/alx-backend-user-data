@@ -63,7 +63,7 @@ def logout() -> str:
     # If the user exists
     if user:
         # Destroy the session
-        auth.destroy_session(user.id)
+        AUTH.destroy_session(user.id)
         # Redirect the user to GET /
         return redirect('/')
     else:
