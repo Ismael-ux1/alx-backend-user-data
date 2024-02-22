@@ -110,9 +110,10 @@ def get_reset_password_token() -> str:
     return jsonify({"email": email, "reset_token": reset_token})
 
 
-@app.route('/reset_password', methods=['PUT'])
+@app.route("/reset_password", methods=["PUT"])
 def update_password() -> str:
-    """ function that respond to the PUT /reset_password route."""
+    """function that respond to the PUT /reset_password route"""
+
     # Get the email, reset token, and new password from the form data
     email = request.form.get('email')
     reset_token = request.form.get('reset_token')
@@ -127,7 +128,7 @@ def update_password() -> str:
 
     # If the token is valid, respond with a 200 HTTP status and,
     # the email and message
-    return jsonify({"email": email, "message": "Password updated"}), 200
+    return jsonify({"email": email, "message": "Password updated"})
 
 
 if __name__ == "__main__":
