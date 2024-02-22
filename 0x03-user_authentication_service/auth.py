@@ -111,3 +111,26 @@ class Auth:
 
         # Return the session ID
         return session_id
+
+    def get_user_from_session_id(self, session_id: str):
+        """Get the user corresponding to a session ID
+
+        Args:
+            session_id (str): The session ID
+
+        Returns:
+            User: The corresponding User object, or None if no user is found
+        """
+        # If the session ID is None, return None
+        if session_id is None:
+            return None
+
+        # Try to find the user with the given session ID
+        try:
+            user = self._db.find_user_by(session_id=session_id)
+        except NoResultFound:
+            # If no user is found, return None
+            return None
+
+        # If a user is found, return the user
+        return user
