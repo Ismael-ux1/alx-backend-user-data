@@ -192,10 +192,8 @@ class Auth:
             # If the user does not exist, raise a ValueError
             raise ValueError()
 
-        # If the user exists, hash the new password
-        hashed_password = self._hash_password(password)
-
         # Update the user's hashed_password field with the new hashed password
         # and the reset_token field to None
-        self._db.update_user(user.id, hashed_password=hashed_password,
+        self._db.update_user(user.id,
+                             hashed_password=hashed_password(password),
                              reset_token=None)
