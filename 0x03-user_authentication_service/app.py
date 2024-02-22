@@ -5,7 +5,7 @@ from auth import Auth
 
 # Create an instance of the Flask class
 app = Flask(__name__)
-auth = Auth()
+AUTH = Auth()
 
 
 @app.route("/")
@@ -35,11 +35,11 @@ def login():
     password = request.form.get('password')
 
     # Validate the email and password
-    if not auth.valid_login(email, password):
+    if not AUTH.valid_login(email, password):
         abort(401)
 
     # If the login information is correct, create a new session for the user
-    session_id = auth.create_session(email)
+    session_id = AUTH.create_session(email)
 
     # Create a response with a JSON payload
     response = make_response(jsonify({"message": "Logged in successfully"}),
