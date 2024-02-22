@@ -171,3 +171,6 @@ class Auth:
 
         # Update the user's reset_token database field
         self._db.update_user(user.id, reset_token=reset_token)
+
+        # Return the token
+        return reset_token
