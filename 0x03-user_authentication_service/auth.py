@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-""" Hash Password """
+"""
+Auth
+"""
 import bcrypt
 import uuid
 from db import DB
