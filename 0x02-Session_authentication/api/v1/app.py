@@ -41,7 +41,7 @@ def before_request_func():
 
     # List of paths that do not require authentication
     excluded_paths = ['/api/v1/status/', '/api/v1/unauthorized/',
-                      '/api/v1/forbidden/']
+                      '/api/v1/forbidden/', '/api/v1/auth_session/login/']
 
     # If the request path does not require authentication,
     # do nothing and proceed with the request
@@ -50,7 +50,8 @@ def before_request_func():
 
     # If the request does not have an Authorization header,
     # abort the request with a 401 Unauthorized status
-    if auth.authorization_header(request) is None:
+    if auth.authorization_header(request) is None and \
+            auth.session_cookie(request) is None:
         abort(401)
 
     # If there is no current user,
