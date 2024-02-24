@@ -4,6 +4,7 @@ from api.v1.auth.auth import Auth
 import uuid
 import os
 from flask import request
+from models.user import User
 
 
 class SessionAuth(Auth):
@@ -39,3 +40,16 @@ class SessionAuth(Auth):
             # If there is no user associated with the session ID
             # .get() will return None
             return self.user_id_by_session_id.get(session_id)
+
+    def current_user(self, request=None):
+        """
+        Returns a User instance based on a cookie value
+        """
+        # Get the session ID from the cookie
+        session_id = self.session_cookie(request)
+
+        # Get the user ID associated with the session ID
+        user_id = self.user_id_for_session_id(session_id)
+
+        # Return the User instance associated with the user ID
+        return User.get(user_id)
